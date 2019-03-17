@@ -18,7 +18,6 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import com.sukaidev.profilephotoview.R;
 
 /**
  * Created by sukaidev on 2019/03/12.
@@ -31,6 +30,7 @@ public class ProfilePhotoView extends View {
     private Paint mPaint;
     // 图片的resId
     private int mResId = -1;
+    @SuppressWarnings("FieldCanBeLocal")
     private Bitmap mBitmap;
     // 头像类型，默认为圆形
     private int mEnumFormat = CIRCLE;
@@ -74,11 +74,10 @@ public class ProfilePhotoView extends View {
             TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.ProfilePhotoView);
             mResId = typedArray.getResourceId(R.styleable.ProfilePhotoView_src, -1);
             if (mResId == -1) {
-                throw new Exception("CustomProfilePhotoView Need A Source Picture.");
+                throw new Exception("ProfilePhotoView Need A Source Picture.");
             }
             mEnumFormat = typedArray.getInt(R.styleable.ProfilePhotoView_format, 0);
             if (mEnumFormat == RECTANGLE) {
-
                 mRadius = typedArray.getInt(R.styleable.ProfilePhotoView_radius, 5);
             }
 
@@ -187,23 +186,31 @@ public class ProfilePhotoView extends View {
         super.onDraw(canvas);
 
         // 将BitmapShader缩放到控件大小
-        float scaleWidth = (float) mWidth / mResWidth;
-        float scaleHeight = (float) mHeight / mResHeight;
+        final float scaleWidth = (float) mWidth / mResWidth;
+        final float scaleHeight = (float) mHeight / mResHeight;
         // 利用矩阵进行缩放
         matrix.setScale(scaleWidth, scaleHeight);
         mBitmapShader.setLocalMatrix(matrix);
         mPaint.setShader(mBitmapShader);
 
-        float halfWidth = (float) mWidth / 2;
-        float halfHeight = (float) mHeight / 2;
+        final float halfWidth = (float) mWidth / 2;
+        final float halfHeight = (float) mHeight / 2;
+
+        // 内切圆半径
+        final float radius = Math.min(halfWidth, halfWidth);
 
         if (mEnumFormat == 0) {
-            canvas.drawCircle(halfWidth, halfHeight, (float) mWidth / 2, mPaint);
+            canvas.drawCircle(halfWidth, halfHeight, radius, mPaint);
         } else {
             canvas.drawRoundRect(mRectF, mRadius, mRadius, mPaint);
         }
     }
 
+    /**
+     * 设置控件类型
+     *
+     * @param format 类型
+     */
     public void setFormat(int format) {
         if (format != CIRCLE && format != RECTANGLE) {
             throw new IllegalArgumentException("Format is illegal.");
@@ -211,6 +218,11 @@ public class ProfilePhotoView extends View {
         mEnumFormat = format;
     }
 
+    /**
+     * 设置圆角半径
+     *
+     * @param radius 圆角半径
+     */
     public void setRadius(int radius) {
         if (mEnumFormat == 1 && radius > 0) {
             this.mRadius = radius;
@@ -219,13 +231,24 @@ public class ProfilePhotoView extends View {
         }
     }
 
+    /**
+     * 设置图片
+     *
+     * @param resId 资源Id
+     */
     public void setImageResource(@DrawableRes int resId) {
         if (mResId == -1 || mResId != resId) {
             this.mResId = resId;
-            reDecode();
+//            reDecode();
         }
     }
 
+    /**
+     * 设置控件大小
+     *
+     * @param widthDp  控件宽DP值
+     * @param heightDp 控件高DP值
+     */
     public void setViewSize(int widthDp, int heightDp) {
         if (widthDp > 0 && heightDp > 0) {
             setLayoutParams(new LinearLayout.LayoutParams(dpToPx(widthDp), dpToPx(heightDp)));

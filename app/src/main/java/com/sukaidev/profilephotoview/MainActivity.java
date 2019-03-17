@@ -7,7 +7,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 /**
- * Created by sukaidev on 2019/3/12.
+ * Created by sukaidev on 2019/03/12.
  */
 public class MainActivity extends AppCompatActivity {
 
@@ -21,12 +21,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         button = findViewById(R.id.btn_change);
-
         LinearLayout ll = findViewById(R.id.linear_layout);
 
         profilePhotoView = new ProfilePhotoView(this);
 
-        profilePhotoView.setViewSize(200, 200);
+        profilePhotoView.setViewSize(150, 150);
         profilePhotoView.setFormat(ProfilePhotoView.CIRCLE);
         profilePhotoView.setImageResource(R.drawable.profile_photo_300_300);
         ll.addView(profilePhotoView);
@@ -34,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                profilePhotoView.setViewSize(100,100);
+                profilePhotoView.setViewSize(100, 100);
                 profilePhotoView.setImageResource(R.drawable.profile_photo_439_507);
                 profilePhotoView.setFormat(ProfilePhotoView.RECTANGLE);
                 profilePhotoView.setRadius(30);
