@@ -224,7 +224,7 @@ public class ProfilePhotoView extends View {
      * @param radius 圆角半径
      */
     public void setRadius(int radius) {
-        if (mEnumFormat == 1 && radius > 0) {
+        if (radius >= 0) {
             this.mRadius = radius;
         } else {
             throw new IllegalArgumentException("Radius is illegal.");
@@ -239,7 +239,8 @@ public class ProfilePhotoView extends View {
     public void setImageResource(@DrawableRes int resId) {
         if (mResId == -1 || mResId != resId) {
             this.mResId = resId;
-//            reDecode();
+            reDecode();
+            invalidate();
         }
     }
 
